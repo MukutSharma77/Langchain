@@ -3,5 +3,5 @@
 
 ### Projects
 ##### Project A: Text Summarization
-#### Project B: App.py (Chat bot using langchain)s
-Project C: Brief description of the project and how Langchain was used.
+##### Project B: App.py (Chat bot using langchain)s
+##### Project C: Chatpdf.py (Used to get result of a query from documnets)
