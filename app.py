@@ -1,39 +1,58 @@
-# Q&A Chatbot
-from langchain.llms import OpenAI
-
-#from dotenv import load_dotenv
-
-#load_dotenv()  # take environment variables from .env.
-
 import streamlit as st
-import os
-import os
-os.environ["OPEN_API_KEY"]="sk-lGX5PVtTlB2"
+from langchain.prompts import PromptTemplate
+from langchain.llms import CTransformers
 
-## Function to load OpenAI model and get respones
+## Function To get response from LLAma 2 model
 
-def get_openai_response(question):
-    llm=OpenAI(model_name="text-davinci-003",temperature=0.5,openai_api_key=os.environ["OPEN_API_KEY"])
-    response=llm(question)
+def getLLamaresponse(input_text,no_words,blog_style):
+
+    ### LLama2 model
+    llm=CTransformers(model='models/llama-2-7b-chat.ggmlv3.q8_0.bin',
+                      model_type='llama',
+                      config={'max_new_tokens':256,
+                              'temperature':0.01})
+    
+    ## Prompt Template
+
+    template="""
+        Write a blog for {blog_style} job profile for a topic {input_text}
+        within {no_words} words.
+            """
+    
+    prompt=PromptTemplate(input_variables=["blog_style","input_text",'no_words'],
+                          template=template)
+    
+    ## Generate the ressponse from the LLama 2 model
+    response=llm(prompt.format(blog_style=blog_style,input_text=input_text,no_words=no_words))
+    print(response)
     return response
 
-##initialize our streamlit app
 
-st.set_page_config(page_title="Q&A Demo")
 
-st.header("Langchain Application")
 
-input=st.text_input("Input: ",key="input")
-response=get_openai_response(input)
 
-submit=st.button("Ask the question")
 
-## If ask button is clicked
+st.set_page_config(page_title="Generate Blogs",
+                    page_icon='🤖',
+                    layout='centered',
+                    initial_sidebar_state='collapsed')
 
+st.header("Generate Blogs 🤖")
+
+input_text=st.text_input("Enter the Blog Topic")
+
+## creating to more columns for additonal 2 fields
+
+col1,col2=st.columns([5,5])
+
+with col1:
+    no_words=st.text_input('No of Words')
+with col2:
+    blog_style=st.selectbox('Writing the blog for',
+                            ('Researchers','Data Scientist','Common People'),index=0)
+    
+submit=st.button("Generate")
+
+## Final response
 if submit:
-    st.subheader("The Response is")
-    st.write(response)
-
-
-
-
+    st.write(getLLamaresponse(input_text,no_words,blog_style))
