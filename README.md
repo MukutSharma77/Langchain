@@ -5,4 +5,5 @@
 ##### Project A: Text Summarization
 ##### Project B: Chatbot.py (Chat bot using langchain)s
 ##### Project C: Chatpdf.py (Used to get result of a query from documnets)
-##### Project C: app.py (blog generation)
+##### Project D: app.py (blog generation)
+##### Project E: app.py (Calories Calculater with image)
